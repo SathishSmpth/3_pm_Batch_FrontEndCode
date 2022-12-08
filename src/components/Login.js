@@ -5,66 +5,76 @@ import { Link} from "react-router-dom";
 
 
 const Login = () => {
-    const [userData, setUserData] = useState("");
-    const [errorMessage, setErrorMessage] = useState(false);
-    const [, forceUpdate] = useState("");
-    const [loginData, setLoginData] = useState({
-        Email:"",
-        Password:""
-    });
+    const [email,setEmail] = useState("")
+    const [password,setPassword] = useState("")
 
-    async function get() {
-        await axios.post('http://localhost:4000/login',{
-            Email:loginData.Email,
-            Password:loginData.Password
-            })
-            .then(data => {
-                setUserData(data)
-            })
-            .catch(err=>{
-                setErrorMessage(true)
-                forceUpdate()
-            }
-            );
-            console.log(userData)
-        }
-        
-        const getLoginData=(e)=>{
-            const name = e.target.name
-            const value = e.target.value
-            setLoginData({
-                ...loginData,
-            [name]:value
-        })
+    const [userData,setUserData] = useState([])
+
+    const login = async()=>{
+            await axios.post('http://localhost:4000/login',{
+                email:email,
+                password:password
+            }).then(response=>setUserData(response.data))
+            console.log(userData);
     }
+    // const [loginData, setLoginData] = useState({
+    //     email:"",
+    //     password:""
+    // });
+
+    // async function get() {
+    //     await axios.post('http://localhost:4000/login',{
+    //         email:loginData.email,
+    //         password:loginData.password
+    //         })
+    //         .then(data => {
+    //             setUserData(data.data)
+    //             console.log(data)
+    //             console.log(userData)
+    //         })
+    //         .catch(err=>{
+    //             setErrorMessage(true)
+    //             forceUpdate()
+    //         }
+    //         );
+    //         console.log(userData)
+    //     }
+        
+    //     const getLoginData=(e)=>{
+    //         const name = e.target.name
+    //         const value = e.target.value
+    //         setLoginData({
+    //             ...loginData,
+    //         [name]:value
+    //     })
+    // }
     return (
         <div>
             <div className="mb-3">
-                <label className="form-label">Email address or Phone</label>
+                <label className="form-label">email address or Phone</label>
                 <input
                     type="email"
                     className="form-control"
                     id="exampleFormControlInput1"
-                    placeholder="Email or Phone"
-                    name="Email"
-                    onChange={getLoginData}
-                    value={loginData.Email}
+                    placeholder="email or Phone"
+                    name="email"
+                    onChange={(e)=>setEmail(e.target.value)}
                 />
-                <label className="form-label">Password</label>
+                <label className="form-label">password</label>
                 <input
                     className="form-control"
                     id="exampleFormControlTextarea1"
                     rows="3" 
                     type="password"
-                    placeholder="Password"
-                    name="Password"
-                    onChange={getLoginData}
-                    value={loginData.Password}
+                    placeholder="password"
+                    name="password"
+                    onChange={(e)=>setPassword(e.target.value)}
                 />
-                <button className="btn btn-outline-success" onClick={() => get()}>Login</button>
-                {errorMessage && <div className="text-danger">Email or Password is incorrect</div>}
+                <button className="btn btn-outline-success" onClick={login}>Login</button>
+                {/* {errorMessage && <div className="text-danger">email or password is incorrect</div>} */}
             </div>
             <div className="text-primary"><Link to="/post">Create an Account or Register</Link></div>
+            {/* {userData && <LoginPage userDetail={userData}/>} */}
             {userData && <LoginPage userDetail={userData}/>}
         </div>
     )
